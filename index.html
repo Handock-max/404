@@ -1,286 +1,331 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proposition de prestation</title>
-<style>
-:root {
-    --primary-color: #007BFF; /* Bleu */
-    --text-color: #000000; /* Noir par défaut */
-    --bg-color: #ffffff; /* Blanc par défaut */
-    --btn-accept: #28a745;
-    --btn-refuse: #dc3545;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposition de prestation</title>
+  <style>
+    /* Reset et anti-débordement */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden; /* empêche le débordement horizontal */
+    }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0;
-    transition: background-color 0.3s, color 0.3s;
-}
+    /* Container principal */
+    .container {
+      width: 90%;          /* prend 90% de l’écran sur mobile */
+      max-width: 600px;    /* limite sur PC */
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      border: 2px solid #000;
+      position: relative;
+    }
 
-.theme-container {
-    display: flex;
-    justify-content: flex-end;
-    width: 520px;
-    margin-bottom: 10px;
-}
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
+    }
 
-.theme-btn {
-    width: 40px;
-    height: 40px;
-    margin-left: 5px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s;
-}
-#lightBtn { background: #FFD700; } /* Soleil */
-#darkBtn { background: #4B0082; color: #fff; } /* Lune */
+    h2 {
+      margin-bottom: 20px;
+      color: #000;
+    }
 
-.container {
-    position: relative;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    max-width: 500px;
-    text-align: center;
-    border: 2px solid transparent;
-    transition: background-color 0.3s, color 0.3s, border 0.3s;
-}
+    button {
+      margin: 10px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: #fff;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
 
-.container.dark {
-    border: 2px solid #fff; /* bordure blanche en sombre */
-}
+    /* Champs de formulaire */
+    input, textarea, select {
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      margin: 10px auto;
+      display: block;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
 
-.logo {
-    width: 120px;
-    height: auto;
-    margin-bottom: 20px;
-}
+    /* Navigation */
+    .backBtn {
+      background-color: #6c757d;
+    }
+    .backBtn:hover {
+      background-color: #545b62;
+    }
 
-button {
-    padding: 10px 20px;
-    margin: 10px 5px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s;
-}
-button.accept { background-color: var(--btn-accept); color: #fff; }
-button.refuse { background-color: var(--btn-refuse); color: #fff; }
-button.backBtn { background-color: #6c757d; color: #fff; }
+    /* Boutons thème */
+    .theme-toggle {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      display: flex;
+      gap: 8px;
+      background: #fff;
+      border: 2px solid #000;
+      border-radius: 10px;
+      padding: 5px;
+    }
+    .theme-toggle button {
+      background: none;
+      color: #000;
+      font-size: 18px;
+      padding: 5px 8px;
+    }
+    .theme-toggle button.active {
+      background: #007BFF;
+      color: #fff;
+      border-radius: 5px;
+    }
 
-.hidden { display: none; }
-
-input, textarea, select {
-    width: 80%;
-    max-width: 400px;
-    padding: 10px;
-    margin: 10px auto;
-    display: block;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-/* Thème sombre */
-body.dark, .container.dark {
-    --bg-color: #000000;
-    --text-color: #ffffff;
-}
-</style>
+    /* Mode sombre */
+    body.dark {
+      background-color: #000;
+      color: #fff;
+    }
+    body.dark .container {
+      background-color: #111;
+      border: 2px solid #fff;
+    }
+    body.dark h2 {
+      color: #fff;
+    }
+    body.dark .theme-toggle {
+      background: #000;
+      border: 2px solid #fff;
+    }
+    body.dark .theme-toggle button {
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <!-- Boutons thème -->
+    <div class="theme-toggle">
+      <button id="lightBtn" class="active">☀️</button>
+      <button id="darkBtn">🌙</button>
+    </div>
 
-<!-- Boutons thème au-dessus du cadre -->
-<div class="theme-container">
-    <button class="theme-btn" id="lightBtn">☀️</button>
-    <button class="theme-btn" id="darkBtn">🌙</button>
-</div>
-
-<div class="container" id="mainContainer">
+    <!-- Logo -->
     <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
-    <h2>Proposition de prestation en attente de validation</h2>
-    <button class="accept" id="acceptBtn">J'accepte la prestation</button>
-    <button class="refuse" id="refuseBtn">Je refuse la prestation</button>
-</div>
 
-<script>
-const mainContainer = document.getElementById('mainContainer');
-const lightBtn = document.getElementById('lightBtn');
-const darkBtn = document.getElementById('darkBtn');
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    <!-- Contenu dynamique -->
+    <div id="content">
+      <h2>Proposition de prestation en attente de validation.</h2>
+      <button id="acceptBtn">✅ J'accepte la prestation</button>
+      <button id="refuseBtn">❌ Je refuse la prestation</button>
+    </div>
+  </div>
 
-// Historique des pages
-let pageHistory = [];
+  <script>
+    const content = document.getElementById('content');
+    const lightBtn = document.getElementById('lightBtn');
+    const darkBtn = document.getElementById('darkBtn');
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-function goBack() {
-    if (pageHistory.length > 0) {
-        const lastPage = pageHistory.pop();
-        mainContainer.innerHTML = lastPage;
-        attachEventHandlers();
+    // --- Thème ---
+    lightBtn.addEventListener('click', () => {
+      document.body.classList.remove('dark');
+      lightBtn.classList.add('active');
+      darkBtn.classList.remove('active');
+    });
+    darkBtn.addEventListener('click', () => {
+      document.body.classList.add('dark');
+      darkBtn.classList.add('active');
+      lightBtn.classList.remove('active');
+    });
+
+    // --- Accepter ---
+    document.getElementById('acceptBtn').addEventListener('click', () => {
+      content.innerHTML = `
+        <h2>Merci pour votre confiance 🙏</h2>
+        <p>Veuillez remplir ce formulaire :</p>
+        <input type="text" id="firstName" placeholder="Prénom *" required>
+        <input type="text" id="lastName" placeholder="Nom *" required>
+        <input type="tel" id="phone" placeholder="Téléphone">
+        <input type="email" id="email" placeholder="Email *" required>
+        ${isMobile ? `
+          <label>Envoyer par :</label>
+          <select id="sendOption">
+            <option value="whatsapp" selected>WhatsApp</option>
+            <option value="mail">Email</option>
+          </select>
+        ` : ``}
+        <button id="sendAcceptBtn">📩 Envoyer la réponse</button>
+        <button class="backBtn" id="backToMain">⬅️ Retour</button>
+      `;
+      attachBackToMain();
+      attachAcceptSend();
+    });
+
+    // --- Refuser ---
+    document.getElementById('refuseBtn').addEventListener('click', () => {
+      content.innerHTML = `
+        <h2>Souhaitez-vous arrêter définitivement la collaboration ?</h2>
+        <button id="stopBtn">🛑 Arrêt définitif</button>
+        <button id="issueBtn">⚠️ Il y a un souci</button>
+        <button class="backBtn" id="backToMain">⬅️ Retour</button>
+      `;
+      attachBackToMain();
+      document.getElementById('stopBtn').addEventListener('click', () => {
+        content.innerHTML = `
+          <h2>Merci pour votre retour 🙏</h2>
+          <p>Nous espérons vous revoir bientôt.</p>
+          <button class="backBtn" id="backToMain">⬅️ Retour</button>
+        `;
+        attachBackToMain();
+      });
+      document.getElementById('issueBtn').addEventListener('click', () => {
+        content.innerHTML = `
+          <h2>Expliquez le souci :</h2>
+          <textarea id="issueText" placeholder="Votre message..."></textarea>
+          <button id="sendIssueBtn">📩 Envoyer</button>
+          <button class="backBtn" id="backToMain">⬅️ Retour</button>
+        `;
+        attachBackToMain();
+        attachIssueSend();
+      });
+    });
+
+    // --- Retour ---
+    function attachBackToMain() {
+      const backBtn = document.getElementById('backToMain');
+      if(backBtn) backBtn.addEventListener('click', () => {
+        content.innerHTML = `
+          <h2>Proposition de prestation en attente de validation.</h2>
+          <button id="acceptBtn">✅ J'accepte la prestation</button>
+          <button id="refuseBtn">❌ Je refuse la prestation</button>
+        `;
+        document.getElementById('acceptBtn').addEventListener('click', () => {
+          content.innerHTML = `
+            <h2>Merci pour votre confiance 🙏</h2>
+            <p>Veuillez remplir ce formulaire :</p>
+            <input type="text" id="firstName" placeholder="Prénom *" required>
+            <input type="text" id="lastName" placeholder="Nom *" required>
+            <input type="tel" id="phone" placeholder="Téléphone">
+            <input type="email" id="email" placeholder="Email *" required>
+            ${isMobile ? `
+              <label>Envoyer par :</label>
+              <select id="sendOption">
+                <option value="whatsapp" selected>WhatsApp</option>
+                <option value="mail">Email</option>
+              </select>
+            ` : ``}
+            <button id="sendAcceptBtn">📩 Envoyer la réponse</button>
+            <button class="backBtn" id="backToMain">⬅️ Retour</button>
+          `;
+          attachBackToMain();
+          attachAcceptSend();
+        });
+        document.getElementById('refuseBtn').addEventListener('click', () => {
+          content.innerHTML = `
+            <h2>Souhaitez-vous arrêter définitivement la collaboration ?</h2>
+            <button id="stopBtn">🛑 Arrêt définitif</button>
+            <button id="issueBtn">⚠️ Il y a un souci</button>
+            <button class="backBtn" id="backToMain">⬅️ Retour</button>
+          `;
+          attachBackToMain();
+          document.getElementById('stopBtn').addEventListener('click', () => {
+            content.innerHTML = `
+              <h2>Merci pour votre retour 🙏</h2>
+              <p>Nous espérons vous revoir bientôt.</p>
+              <button class="backBtn" id="backToMain">⬅️ Retour</button>
+            `;
+            attachBackToMain();
+          });
+          document.getElementById('issueBtn').addEventListener('click', () => {
+            content.innerHTML = `
+              <h2>Expliquez le souci :</h2>
+              <textarea id="issueText" placeholder="Votre message..."></textarea>
+              <button id="sendIssueBtn">📩 Envoyer</button>
+              <button class="backBtn" id="backToMain">⬅️ Retour</button>
+            `;
+            attachBackToMain();
+            attachIssueSend();
+          });
+        });
+      });
     }
-}
 
-// Thème clair
-lightBtn.addEventListener('click', () => {
-    document.body.classList.remove('dark');
-    mainContainer.classList.remove('dark');
-});
-
-// Thème sombre
-darkBtn.addEventListener('click', () => {
-    document.body.classList.add('dark');
-    mainContainer.classList.add('dark');
-});
-
-// Stocke et change de page
-function navigateTo(contentHTML) {
-    pageHistory.push(mainContainer.innerHTML);
-    mainContainer.innerHTML = contentHTML;
-    attachEventHandlers();
-}
-
-// Re-attach des handlers à chaque étape
-function attachEventHandlers() {
-    const backBtn = document.getElementById('backBtn');
-    if(backBtn) backBtn.addEventListener('click', goBack);
-
-    const acceptBtn = document.getElementById('acceptBtn');
-    if(acceptBtn) acceptBtn.addEventListener('click', acceptFlow);
-
-    const refuseBtn = document.getElementById('refuseBtn');
-    if(refuseBtn) refuseBtn.addEventListener('click', refuseFlow);
-
-    const sendAcceptBtn = document.getElementById('sendAcceptBtn');
-    if(sendAcceptBtn) sendAcceptBtn.addEventListener('click', () => {
+    // --- Envoi acceptation ---
+    function attachAcceptSend() {
+      const sendBtn = document.getElementById('sendAcceptBtn');
+      if(sendBtn) sendBtn.addEventListener('click', () => {
         const firstName = document.getElementById('firstName').value.trim();
         const lastName = document.getElementById('lastName').value.trim();
         const phone = document.getElementById('phone').value.trim();
         const email = document.getElementById('email').value.trim();
-
-        // Vérification champs requis
         if(!firstName || !lastName || !email) {
-            alert("Veuillez remplir tous les champs requis (Nom, Prénom et Email).");
-            return;
+          alert("Veuillez remplir tous les champs requis (Prénom, Nom, Email).");
+          return;
         }
-
         const bodyMessage = encodeURIComponent(
-            `Bonjour,\n\nJe confirme que j'accepte votre proposition de prestation.\n\nNom: ${lastName}\nPrénom: ${firstName}\nTéléphone: ${phone}\nEmail: ${email}`
+          `Bonjour,\n\nJe confirme que j'accepte votre proposition de prestation.\n\nNom: ${lastName}\nPrénom: ${firstName}\nTéléphone: ${phone}\nEmail: ${email}`
         );
-
         if (isMobile) {
-            const sendOption = document.getElementById('sendOption').value;
-            if (sendOption === 'whatsapp') {
-                window.open(`https://wa.me/22896933995?text=${bodyMessage}`);
-            } else {
-                window.open(`mailto:martindetours98@gmail.com?subject=Acceptation%20Prestation&body=${bodyMessage}`);
-            }
-        } else {
+          const sendOption = document.getElementById('sendOption').value;
+          if (sendOption === 'whatsapp') {
+            window.open(`https://wa.me/22896933995?text=${bodyMessage}`);
+          } else {
             window.open(`mailto:martindetours98@gmail.com?subject=Acceptation%20Prestation&body=${bodyMessage}`);
+          }
+        } else {
+          window.open(`mailto:martindetours98@gmail.com?subject=Acceptation%20Prestation&body=${bodyMessage}`);
         }
         alert('Votre réponse est prête pour envoi !');
-    });
-
-    const sendIssueBtn = document.getElementById('sendIssueBtn');
-    if(sendIssueBtn) sendIssueBtn.addEventListener('click', () => {
-        const message = encodeURIComponent(document.getElementById('issueText').value.trim());
-        if(!message) {
-            alert("Veuillez décrire le problème avant d'envoyer.");
-            return;
-        }
-        window.open(`mailto:martindetours98@gmail.com?subject=Problème%20Prestation&body=${message}`);
-        alert('Merci, votre message a été préparé pour envoi par mail.');
-    });
-
-    const stopBtn = document.getElementById('stopBtn');
-    if(stopBtn) stopBtn.addEventListener('click', () => {
-        navigateTo(`
-            <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
-            <h3>Merci pour votre temps. À bientôt !</h3>
-            <button class="backBtn" id="backBtn">Retour</button>
-        `);
-    });
-
-    const issueBtn = document.getElementById('issueBtn');
-    if(issueBtn) issueBtn.addEventListener('click', () => {
-        navigateTo(`
-            <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
-            <h3>Expliquez la situation</h3>
-            <textarea id="issueText" placeholder="Décrivez le problème ici..."></textarea>
-            <button id="sendIssueBtn">Envoyer</button>
-            <button class="backBtn" id="backBtn">Retour</button>
-        `);
-    });
-
-    // Boutons thème ré-attachement (si besoin)
-    const newLight = document.getElementById('lightBtn');
-    const newDark = document.getElementById('darkBtn');
-    if(newLight) newLight.addEventListener('click', () => {
-        document.body.classList.remove('dark');
-        mainContainer.classList.remove('dark');
-    });
-    if(newDark) newDark.addEventListener('click', () => {
-        document.body.classList.add('dark');
-        mainContainer.classList.add('dark');
-    });
-}
-
-// Flux Refus
-function refuseFlow() {
-    navigateTo(`
-        <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
-        <h3>Vous avez refusé la prestation</h3>
-        <p>Voulez-vous arrêter définitivement la collaboration ou y a-t-il un souci avec le prix/prestation ?</p>
-        <button id="stopBtn">Arrêt définitif</button>
-        <button id="issueBtn">Il y a un souci</button>
-        <button class="backBtn" id="backBtn">Retour</button>
-    `);
-}
-
-// Flux Acceptation
-function acceptFlow() {
-    let extraMessage = '';
-    if (isMobile) {
-        extraMessage = `<p>Vous pouvez envoyer votre réponse par Mail ou WhatsApp.</p>
-        <select id="sendOption">
-            <option value="mail">Mail</option>
-            <option value="whatsapp">WhatsApp</option>
-        </select>`;
-    } else {
-        extraMessage = `<p>L'envoi se fera uniquement par Mail.</p>`;
+      });
     }
 
-    navigateTo(`
-        <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
-        <h3>Merci d'accepter la prestation !</h3>
-        ${extraMessage}
-        <input type="text" id="firstName" placeholder="Prénom" required>
-        <input type="text" id="lastName" placeholder="Nom" required>
-        <input type="tel" id="phone" placeholder="Numéro de téléphone">
-        <input type="email" id="email" placeholder="Adresse mail" required>
-        <button id="sendAcceptBtn">Envoyer la réponse</button>
-        <button class="backBtn" id="backBtn">Retour</button>
-    `);
-}
-
-attachEventHandlers();
-</script>
-
+    // --- Envoi souci ---
+    function attachIssueSend() {
+      const sendBtn = document.getElementById('sendIssueBtn');
+      if(sendBtn) sendBtn.addEventListener('click', () => {
+        const issueText = document.getElementById('issueText').value.trim();
+        if(!issueText) {
+          alert("Veuillez expliquer votre souci avant d'envoyer.");
+          return;
+        }
+        const bodyMessage = encodeURIComponent(
+          `Bonjour,\n\nJe rencontre un souci concernant la prestation :\n\n${issueText}`
+        );
+        if (isMobile) {
+          window.open(`https://wa.me/22896933995?text=${bodyMessage}`);
+        } else {
+          window.open(`mailto:martindetours98@gmail.com?subject=Souci%20Prestation&body=${bodyMessage}`);
+        }
+        alert('Votre message est prêt pour envoi !');
+      });
+    }
+  </script>
 </body>
 </html>
+
