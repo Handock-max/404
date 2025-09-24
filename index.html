@@ -6,9 +6,9 @@
 <title>Proposition de prestation</title>
 <style>
 :root {
-    --primary-color: #007BFF;
-    --text-color: #000000;
-    --bg-color: #ffffff;
+    --primary-color: #007BFF; /* Bleu */
+    --text-color: #000000; /* Noir par défaut */
+    --bg-color: #ffffff; /* Blanc par défaut */
     --btn-accept: #28a745;
     --btn-refuse: #dc3545;
 }
@@ -21,26 +21,15 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
     margin: 0;
-    padding: 10px;
-    box-sizing: border-box;
     transition: background-color 0.3s, color 0.3s;
-}
-
-.wrapper {
-    position: relative;
-    max-width: 520px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .theme-container {
     display: flex;
     justify-content: flex-end;
-    width: 100%;
+    width: 520px;
     margin-bottom: 10px;
 }
 
@@ -57,8 +46,8 @@ body {
     align-items: center;
     transition: all 0.3s;
 }
-#lightBtn { background: #FFD700; } 
-#darkBtn { background: #4B0082; color: #fff; }
+#lightBtn { background: #FFD700; } /* Soleil */
+#darkBtn { background: #4B0082; color: #fff; } /* Lune */
 
 .container {
     position: relative;
@@ -67,16 +56,14 @@ body {
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    width: 100%;
     max-width: 500px;
     text-align: center;
     border: 2px solid transparent;
     transition: background-color 0.3s, color 0.3s, border 0.3s;
-    box-sizing: border-box;
 }
 
 .container.dark {
-    border: 2px solid #fff;
+    border: 2px solid #fff; /* bordure blanche en sombre */
 }
 
 .logo {
@@ -109,10 +96,9 @@ input, textarea, select {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 14px;
-    box-sizing: border-box;
-    resize: vertical;
 }
 
+/* Thème sombre */
 body.dark, .container.dark {
     --bg-color: #000000;
     --text-color: #ffffff;
@@ -121,18 +107,17 @@ body.dark, .container.dark {
 </head>
 <body>
 
-<div class="wrapper">
-    <div class="theme-container">
-        <button class="theme-btn" id="lightBtn">☀️</button>
-        <button class="theme-btn" id="darkBtn">🌙</button>
-    </div>
+<!-- Boutons thème au-dessus du cadre -->
+<div class="theme-container">
+    <button class="theme-btn" id="lightBtn">☀️</button>
+    <button class="theme-btn" id="darkBtn">🌙</button>
+</div>
 
-    <div class="container" id="mainContainer">
-        <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
-        <h2>Proposition de prestation en attente de validation</h2>
-        <button class="accept" id="acceptBtn">J'accepte la prestation</button>
-        <button class="refuse" id="refuseBtn">Je refuse la prestation</button>
-    </div>
+<div class="container" id="mainContainer">
+    <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
+    <h2>Proposition de prestation en attente de validation</h2>
+    <button class="accept" id="acceptBtn">J'accepte la prestation</button>
+    <button class="refuse" id="refuseBtn">Je refuse la prestation</button>
 </div>
 
 <script>
@@ -141,6 +126,7 @@ const lightBtn = document.getElementById('lightBtn');
 const darkBtn = document.getElementById('darkBtn');
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+// Historique des pages
 let pageHistory = [];
 
 function goBack() {
@@ -151,22 +137,26 @@ function goBack() {
     }
 }
 
+// Thème clair
 lightBtn.addEventListener('click', () => {
     document.body.classList.remove('dark');
     mainContainer.classList.remove('dark');
 });
 
+// Thème sombre
 darkBtn.addEventListener('click', () => {
     document.body.classList.add('dark');
     mainContainer.classList.add('dark');
 });
 
+// Stocke et change de page
 function navigateTo(contentHTML) {
     pageHistory.push(mainContainer.innerHTML);
     mainContainer.innerHTML = contentHTML;
     attachEventHandlers();
 }
 
+// Re-attach des handlers à chaque étape
 function attachEventHandlers() {
     const backBtn = document.getElementById('backBtn');
     if(backBtn) backBtn.addEventListener('click', goBack);
@@ -184,6 +174,7 @@ function attachEventHandlers() {
         const phone = document.getElementById('phone').value.trim();
         const email = document.getElementById('email').value.trim();
 
+        // Vérification champs requis
         if(!firstName || !lastName || !email) {
             alert("Veuillez remplir tous les champs requis (Nom, Prénom et Email).");
             return;
@@ -208,18 +199,13 @@ function attachEventHandlers() {
 
     const sendIssueBtn = document.getElementById('sendIssueBtn');
     if(sendIssueBtn) sendIssueBtn.addEventListener('click', () => {
-        const message = document.getElementById('issueText').value.trim();
+        const message = encodeURIComponent(document.getElementById('issueText').value.trim());
         if(!message) {
             alert("Veuillez décrire le problème avant d'envoyer.");
             return;
         }
-        const encodedMessage = encodeURIComponent(message);
-        if(isMobile) {
-            window.open(`https://wa.me/22896933995?text=${encodedMessage}`);
-        } else {
-            window.open(`mailto:martindetours98@gmail.com?subject=Problème%20Prestation&body=${encodedMessage}`);
-        }
-        alert('Merci, votre message a été préparé pour envoi.');
+        window.open(`mailto:martindetours98@gmail.com?subject=Problème%20Prestation&body=${message}`);
+        alert('Merci, votre message a été préparé pour envoi par mail.');
     });
 
     const stopBtn = document.getElementById('stopBtn');
@@ -242,6 +228,7 @@ function attachEventHandlers() {
         `);
     });
 
+    // Boutons thème ré-attachement (si besoin)
     const newLight = document.getElementById('lightBtn');
     const newDark = document.getElementById('darkBtn');
     if(newLight) newLight.addEventListener('click', () => {
@@ -254,7 +241,7 @@ function attachEventHandlers() {
     });
 }
 
-// Refus
+// Flux Refus
 function refuseFlow() {
     navigateTo(`
         <img src="ash-tech_logo.jpg" alt="Logo" class="logo">
@@ -266,14 +253,14 @@ function refuseFlow() {
     `);
 }
 
-// Acceptation
+// Flux Acceptation
 function acceptFlow() {
     let extraMessage = '';
-    if(isMobile) {
-        extraMessage = `<p>Vous pouvez envoyer votre réponse par WhatsApp (par défaut) ou Mail.</p>
+    if (isMobile) {
+        extraMessage = `<p>Vous pouvez envoyer votre réponse par Mail ou WhatsApp.</p>
         <select id="sendOption">
-            <option value="whatsapp" selected>WhatsApp</option>
             <option value="mail">Mail</option>
+            <option value="whatsapp">WhatsApp</option>
         </select>`;
     } else {
         extraMessage = `<p>L'envoi se fera uniquement par Mail.</p>`;
